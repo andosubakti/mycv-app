@@ -24,7 +24,7 @@ const Navigation = () => {
   ];
   return (
     <div className="mb-20">
-      <div className="flex flex-row w-full justify-between px-12 py-6 fixed top-0 left-0 bg-white">
+      <div className="flex flex-row w-full justify-between px-12 py-6 fixed top-0 left-0 bg-white z-10">
         <Logo />
         <div className="flex flex-row gap-4 justify-center items-center">
           {data.map((item, index) => {
