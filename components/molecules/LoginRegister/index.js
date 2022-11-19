@@ -3,7 +3,7 @@ import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import Select from "../../atoms/Select";
 
-const LoginRegister = () => {
+const LoginRegister = ({ isOpen }) => {
   const [active, setActive] = useState("login");
   const initialLoginData = {
     phoneNumber: "",
@@ -33,7 +33,7 @@ const LoginRegister = () => {
     },
   ];
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className={isOpen ? "flex flex-col w-full h-full" : "hidden"}>
       <div className="flex flex-row justify-between w-full text-center text-lg font-medium">
         <div
           className={

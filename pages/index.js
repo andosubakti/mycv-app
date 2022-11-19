@@ -1,7 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
 import Logo from "../components/atoms/Logo";
+import Alert from "../components/molecules/Alert";
 import LoginRegister from "../components/molecules/LoginRegister";
+import Otp from "../components/molecules/OTP";
 import Box from "../components/templates/Box";
 import { getDateToday } from "../utils/helper";
 
@@ -38,12 +40,21 @@ export default function Home() {
             priority
           />
         </div>
-        <Box>
-          <div style={{ minWidth: "350px" }}>
-            <div className="text-base font-semibold my-5">{today}</div>
-            <LoginRegister />
-          </div>
-        </Box>
+        <div className="flex flex-col gap-4">
+          <Alert
+            type="success"
+            text="yuhu success"
+            isOpen={false}
+            onClose={() => console.log("on close alert")}
+          />
+          <Box>
+            <div style={{ minWidth: "350px" }}>
+              <div className="text-base font-semibold my-5">{today}</div>
+              <LoginRegister isOpen={false} />
+              <Otp isOpen={true} />
+            </div>
+          </Box>
+        </div>
       </div>
     </div>
   );
