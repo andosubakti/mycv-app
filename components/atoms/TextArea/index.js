@@ -1,45 +1,28 @@
-import React, { useState } from "react";
-import style from "./Input.module.scss";
+import React from "react";
 
-const Input = ({
+const TextArea = ({
   label,
-  type,
-  isPassword,
   onChange,
   value,
   isForm,
   disabled,
   placeholder,
 }) => {
-  const [typeState, setTypeState] = useState(type);
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="text-sm">{label}</div>
       <div className="flex flex-row relative">
-        <input
-          type={typeState}
+        <textarea
           className="border border-solid border-customGray focus:border-customTosca outline-0 px-3 py-1 w-full"
           style={isForm ? { borderRadius: "6px" } : { borderRadius: "100px" }}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder={placeholder}
-        ></input>
-        <img
-          onClick={() => {
-            typeState === "password"
-              ? setTypeState("text")
-              : setTypeState("password");
-          }}
-          src="/eye.svg"
-          alt="eye-icon"
-          className={
-            isPassword ? "absolute right-4 top-1 cursor-pointer" : "hidden"
-          }
-        />
+        ></textarea>
       </div>
     </div>
   );
 };
 
-export default Input;
+export default TextArea;

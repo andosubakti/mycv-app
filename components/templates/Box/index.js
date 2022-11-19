@@ -1,8 +1,12 @@
 import React from "react";
-import style from "./Box.module.scss";
+import styled from "./Box.module.scss";
 
-const Box = ({ children }) => {
-  return <div className={style.container}>{children}</div>;
+const Box = ({ children, style }) => {
+  return (
+    <div className={styled.container} style={style}>
+      {children}
+    </div>
+  );
 };
 
 export default Box;

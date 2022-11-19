@@ -20,6 +20,7 @@ module.exports = {
       customTosca: "#5ABBAD",
       customGray: "#818191",
       customRed: "#D02B29",
+      customToscaLight: "#87F4E7",
     },
   },
   plugins: [],

@@ -50,8 +50,8 @@ export default function Home() {
           <Box>
             <div style={{ minWidth: "350px" }}>
               <div className="text-base font-semibold my-5">{today}</div>
-              <LoginRegister isOpen={false} />
-              <Otp isOpen={true} />
+              <LoginRegister isOpen={true} />
+              <Otp isOpen={false} />
             </div>
           </Box>
         </div>
