@@ -157,7 +157,17 @@ const ModalUpload = ({
       let coverPicData = new FormData();
       coverPicData.append("image", file);
       dispatch(updateCoverPicService(coverPicData));
+    } else if (type === "gallery") {
+      let galleryData = new FormData();
+      for (let i = 0; i < imageFiles.length; i++) {
+        galleryData.append(`image`, imageFiles[i]);
+        dispatch(updateProfilePicService(galleryData));
+      }
     }
+    setFile(null);
+    setFileDataURL(null);
+    setImageFiles(null);
+    setImages(null);
   };
 
   return (
