@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "./Button.module.scss";
 
-const Button = ({ type, text, onClick, icon, altIcon, style }) => {
+const Button = ({
+  type,
+  text,
+  onClick,
+  icon,
+  altIcon,
+  style,
+  disabled,
+  loading,
+}) => {
   return (
     <div
       className={
@@ -11,12 +20,19 @@ const Button = ({ type, text, onClick, icon, altIcon, style }) => {
           ? styled.secondary
           : type === "transparent"
           ? styled.transparent
-          : styled.outlined
+          : type === "outlined"
+          ? styled.outlined
+          : styled.disabled
       }
       style={style}
       onClick={() => onClick()}
     >
       {icon ? <img src={icon} alt={altIcon} /> : ""}
+      {loading ? (
+        <img src="/loading.svg" alt="loading" width={24} height={24} />
+      ) : (
+        ""
+      )}
       {text}
     </div>
   );

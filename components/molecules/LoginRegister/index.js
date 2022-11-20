@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import Select from "../../atoms/Select";
+import { v4 as uuidv4 } from "uuid";
+import { phoneCodeChecker } from "../../../utils/helper";
+import { postRegisterService } from "../../../redux/services/registerServices";
+import { useDispatch, useSelector } from "react-redux";
+import { postLogInService } from "../../../redux/services/oauthServices";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const LoginRegister = ({ isOpen }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [active, setActive] = useState("login");
+  const isLoggedIn = Cookies.get("isLoggedIn") === "true";
+  const { data: logIn, loading: loadingLogIn } = useSelector(
+    (state) => state.oauth.signIn
+  );
+  const { loading: loadingRegister } = useSelector(
+    (state) => state.register.postRegister
+  );
   const initialLoginData = {
     phoneNumber: "",
     password: "",
+    device_token: uuidv4(),
+    device_type: 2,
+    latlong: "",
   };
   const initialRegisterData = {
     country: "",
     phoneNumber: "",
     password: "",
+    device_token: uuidv4(),
+    device_type: 2,
+    latlong: "",
   };
   const [loginData, setLoginData] = useState(initialLoginData);
   const [registerData, setRegisterData] = useState(initialRegisterData);
@@ -32,6 +54,52 @@ const LoginRegister = ({ isOpen }) => {
       value: "indonesia",
     },
   ];
+  const getLatLong = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+
+        const latLong = `${lat} ${long}`;
+        setRegisterData({ ...registerData, latlong: latLong });
+      });
+    } else console.log("Geolocation is not supported by this browser.");
+  };
+
+  const onClickRegister = () => {
+    let registerFormData = new FormData();
+    registerFormData.append(
+      "phone",
+      phoneCodeChecker(registerData.phoneNumber, "62")
+    );
+    registerFormData.append("password", registerData.password);
+    registerFormData.append("country", registerData.country);
+    registerFormData.append("latlong", registerData.latlong);
+    registerFormData.append("device_token", registerData.device_token);
+    registerFormData.append("device_type", registerData.device_type);
+    dispatch(postRegisterService(registerFormData));
+  };
+
+  const onClickLogin = () => {
+    let loginFormData = new FormData();
+    loginFormData.append(
+      "phone",
+      phoneCodeChecker(loginData.phoneNumber, "62")
+    );
+    loginFormData.append("password", loginData.password);
+    loginFormData.append("latlong", loginData.latlong);
+    loginFormData.append("device_token", loginData.device_token);
+    loginFormData.append("device_type", loginData.device_type);
+    dispatch(postLogInService(loginFormData));
+  };
+
+  useEffect(() => {
+    if (isLoggedIn || logIn?.data?.user) {
+      router.push("/profil");
+    }
+    getLatLong();
+  }, [router, isLoggedIn, logIn]);
+
   return (
     <div className={isOpen ? "flex flex-col w-full h-full" : "hidden"}>
       <div className="flex flex-row justify-between w-full text-center text-lg font-medium">
@@ -81,7 +149,12 @@ const LoginRegister = ({ isOpen }) => {
           value={loginData.password}
         />
         <div className="flex flex-col my-4 gap-4">
-          <Button type="primary" text="Login" />
+          <Button
+            type="primary"
+            text="Login"
+            onClick={() => onClickLogin()}
+            loading={loadingLogIn}
+          />
           <Button
             type="secondary"
             text="Reset"
@@ -130,7 +203,21 @@ const LoginRegister = ({ isOpen }) => {
           value={registerData.password}
         />
         <div className="flex flex-col my-4 gap-4">
-          <Button type="primary" text="Register" />
+          <Button
+            type={
+              registerData.country &&
+              registerData.device_token &&
+              registerData.device_type &&
+              registerData.latlong &&
+              registerData.password &&
+              registerData.phoneNumber
+                ? "primary"
+                : "disabled"
+            }
+            text="Register"
+            onClick={() => onClickRegister()}
+            laoding={loadingRegister}
+          />
           <Button
             type="secondary"
             text="Reset"

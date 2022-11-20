@@ -1,14 +1,26 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 import Logo from "../components/atoms/Logo";
 import Alert from "../components/molecules/Alert";
 import LoginRegister from "../components/molecules/LoginRegister";
 import Otp from "../components/molecules/OTP";
 import Box from "../components/templates/Box";
 import { getDateToday } from "../utils/helper";
+import React, { useState, useEffect } from "react";
 
 export default function Home() {
   const today = getDateToday();
+  const { data: register } = useSelector(
+    (state) => state.register.postRegister
+  );
+  const [isOTPAlert, setOTPAlert] = useState(false);
+
+  useEffect(() => {
+    if (register?.data?.user?.phone && !isOTPAlert) {
+      setOTPAlert(true);
+    }
+  }, [register]);
   return (
     <div className="flex flex-col w-screen justify-center h-screen px-20">
       <Head>
@@ -41,17 +53,24 @@ export default function Home() {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Alert
-            type="success"
-            text="yuhu success"
-            isOpen={false}
-            onClose={() => console.log("on close alert")}
-          />
+          {register?.data && (
+            <Alert
+              type="success"
+              text={
+                "We send OTP to " +
+                register.data.user.phone.slice(0, 5) +
+                "****" +
+                register.data.user.phone.slice(10)
+              }
+              isOpen={isOTPAlert}
+              onClose={() => setOTPAlert(false)}
+            />
+          )}
           <Box>
             <div style={{ minWidth: "350px" }}>
               <div className="text-base font-semibold my-5">{today}</div>
-              <LoginRegister isOpen={true} />
-              <Otp isOpen={false} />
+              <LoginRegister isOpen={!register?.data} />
+              <Otp isOpen={register?.data} />
             </div>
           </Box>
         </div>

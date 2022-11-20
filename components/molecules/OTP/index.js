@@ -1,9 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../atoms/Button";
 import OtpInput from "react-otp-input";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  postOTPService,
+  resendOTPService,
+} from "../../../redux/services/registerServices";
+import { useRouter } from "next/router";
 
 const Otp = ({ isOpen }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [OTP, setOTP] = useState("");
+  const { data } = useSelector((state) => state.register.postRegister);
+  const { data: otp, loading: loadingOTP } = useSelector(
+    (state) => state.register.otp
+  );
+  const userId = data?.data?.user?.id;
+  const phoneNumber = data?.data?.user?.phone;
+
+  const onVerifyOTP = () => {
+    let verifyOTPdata = new FormData();
+    verifyOTPdata.append("user_id", userId);
+    verifyOTPdata.append("otp_code", OTP);
+    dispatch(postOTPService(verifyOTPdata));
+  };
+
+  const onResendOTP = () => {
+    setOTP("");
+    let resendOTPData = new FormData();
+    resendOTPData.append("phone", phoneNumber);
+    dispatch(resendOTPService(resendOTPData));
+  };
+
+  useEffect(() => {
+    if (otp?.data?.user?.access_token) {
+      router.push("/profil");
+    }
+  }, [otp]);
   return (
     <div
       className={
@@ -25,9 +59,17 @@ const Otp = ({ isOpen }) => {
         isInputSecure
       />
       <div>
-        <Button type="primary" text="Verify" />
+        <Button
+          type="primary"
+          text="Verify"
+          onClick={() => onVerifyOTP()}
+          loading={loadingOTP}
+        />
       </div>
-      <div className="absolute -bottom-24 -left-8 flex flex-row gap-2 text-customTosca cursor-pointer">
+      <div
+        className="absolute -bottom-24 -left-8 flex flex-row gap-2 text-customTosca cursor-pointer"
+        onClick={() => onResendOTP()}
+      >
         <img src="/reload.svg" alt="reload-icon" />
         Resend OTP Code
       </div>

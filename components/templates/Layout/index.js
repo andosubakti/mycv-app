@@ -4,11 +4,23 @@ import Button from "../../atoms/Button";
 import Navigation from "../../molecules/Navigation";
 import Box from "../Box";
 import ModalUpload from "../../molecules/ModalUpload";
+import { useDispatch } from "react-redux";
+import { postLogOutService } from "../../../redux/services/oauthServices";
+import Cookies from "js-cookie";
 
 const Layout = ({ children }) => {
   const fetchedImgSrc = "cover-default.png";
+  const dispatch = useDispatch();
   const [isChangeCover, setChangeCover] = useState(false);
   const [isChangeProfilePic, setChangeProfilePic] = useState(false);
+
+  const logOutAction = () => {
+    const accessToken = Cookies.get("token");
+    const data = new FormData();
+    data.append("access_token", accessToken);
+    data.append("confirm", 1);
+    dispatch(postLogOutService(data));
+  };
   return (
     <div className="w-screen h-screen flex flex-col">
       <Navigation />
@@ -39,23 +51,31 @@ const Layout = ({ children }) => {
           </div>
         </div>
         <div className="flex flex-row gap-10">
-          <Box style={{ alignItems: "flex-start", gap: "1rem" }}>
-            <div className="text-lg font-bold">Profile Picture</div>
-            <Image
-              src="/profile-default.png"
-              alt="profile-pic"
-              width={224}
-              height={224}
-            />
+          <div className="flex flex-col w-full gap-4 items-center">
+            <Box style={{ alignItems: "flex-start", gap: "1rem" }}>
+              <div className="text-lg font-bold">Profile Picture</div>
+              <Image
+                src="/profile-default.png"
+                alt="profile-pic"
+                width={224}
+                height={224}
+              />
+              <Button
+                type="outlined"
+                text="Upload Media"
+                onClick={() => setChangeProfilePic(true)}
+              />
+              <div className="text-sm text-customGray text-center w-full">
+                PNG, JPG or MP4 up to 50MB
+              </div>
+            </Box>
             <Button
-              type="outlined"
-              text="Upload Media"
-              onClick={() => setChangeProfilePic(true)}
+              type="primary"
+              text="Log Out"
+              style={{ maxWidth: "200px" }}
+              onClick={() => logOutAction()}
             />
-            <div className="text-sm text-customGray text-center w-full">
-              PNG, JPG or MP4 up to 50MB
-            </div>
-          </Box>
+          </div>
           {children}
         </div>
       </div>
