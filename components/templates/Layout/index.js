@@ -38,7 +38,12 @@ const Layout = ({ children }) => {
         <div className="flex flex-row gap-10">
           <Box style={{ alignItems: "flex-start", gap: "1rem" }}>
             <div className="text-lg font-bold">Profile Picture</div>
-            <Image src="/profile-default.png" width={224} height={224} />
+            <Image
+              src="/profile-default.png"
+              alt="profile-pic"
+              width={224}
+              height={224}
+            />
             <Button
               type="outlined"
               text="Upload Media"

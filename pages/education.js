@@ -5,24 +5,26 @@ import Box from "../components/templates/Box";
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
 
-const CareerPage = () => {
+const EducationPage = () => {
   const [isAdd, setAdd] = useState(false);
-  const mockCareerData = [
+  const mockEduData = [
     {
-      name: "PT Erkananta",
-      start: "Jul 7, 2020",
-      end: "Jul 7, 2021",
+      name: "TK Perwita Asri",
+      graduate: "Aug 9, 1999",
     },
     {
-      name: "Indocoin Semesta, Ltd",
-      start: "Jul 7, 2020",
-      end: "Jul 7, 2021",
+      name: "SD N 5 Manokwari, Jayapura",
+      graduate: "Sep 16, 2007",
+    },
+    {
+      name: "SMP N 1 Lhokseumawe",
+      graduate: "Mar 1, 2009",
     },
   ];
   return (
     <div>
       <Head>
-        <title>Career | Prisign</title>
+        <title>Education | Prisign</title>
         <link rel="icon" type="image/png" href="/Icon.svg"></link>
       </Head>
       <Layout>
@@ -35,7 +37,7 @@ const CareerPage = () => {
           </div>
           <div className="flex flex-col w-full">
             <div className="flex flex-row justify-between w-full">
-              <div className="text-lg font-bold">Career Information</div>
+              <div className="text-lg font-bold">Education Information</div>
               <img
                 src="/plus-icon.svg"
                 alt="plus-icon"
@@ -44,14 +46,13 @@ const CareerPage = () => {
               />
             </div>
             <div className="text-customGray text-sm">
-              Information about your career
+              Information about your education
             </div>
           </div>
           <div className={isAdd ? "flex flex-col w-full gap-4" : "hidden"}>
-            <Input label="Company Name" type="text" value="" isForm />
-            <Input label="Start from" type="date" value="" isForm />
-            <Input label="Ending in" type="date" value="" isForm />
-            <div className="flex flex-row gap-4 w-64 my-2">
+            <Input label="School Name" type="text" value="" isForm />
+            <Input label="Graduation Time" type="date" value="" isForm />
+            <div className="flex flex-row gap-4 w-80 my-2">
               <Button
                 type="secondary"
                 text="Discard"
@@ -60,18 +61,18 @@ const CareerPage = () => {
               />
               <Button
                 type="primary"
-                text="Add Career"
+                text="Add Education"
                 style={{ padding: "5px 15px" }}
               />
             </div>
           </div>
           <div className="flex flex-col w-full gap-4">
-            {mockCareerData.map((item, index) => {
+            {mockEduData.map((item, index) => {
               return (
                 <div className="flex flex-col w-full" key={index}>
                   <div className="text-base font-bold">{item.name}</div>
                   <div className="text-base text-customGray">
-                    {item.start} - {item.end}
+                    Graduation at {item.graduate}
                   </div>
                 </div>
               );
@@ -83,4 +84,4 @@ const CareerPage = () => {
   );
 };
 
-export default CareerPage;
+export default EducationPage;
