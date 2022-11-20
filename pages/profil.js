@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Layout from "../components/templates/Layout";
 import Box from "../components/templates/Box";
@@ -6,9 +6,29 @@ import Input from "../components/atoms/Input";
 import TextArea from "../components/atoms/TextArea";
 import Select from "../components/atoms/Select";
 import Button from "../components/atoms/Button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getProfileService,
+  updateProfileService,
+} from "../redux/services/profileServices";
+import { useRouter } from "next/router";
 
 const ProfilPage = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [isEdit, setEdit] = useState(false);
+  const { data } = useSelector((state) => state.profile.profileData);
+  const { loading } = useSelector((state) => state.profile.update);
+  const { data: picture } = useSelector((state) => state.profile.profilePic);
+  const profile = data?.data?.user;
+  const initialData = {
+    name: "",
+    gender: null,
+    birthday: "",
+    hometown: "",
+    bio: "",
+  };
+  const [profileData, setProfileData] = useState(initialData);
   const genderList = [
     {
       name: "Select Gender",
@@ -16,13 +36,42 @@ const ProfilPage = () => {
     },
     {
       name: "Male",
-      value: "male",
+      value: 0,
     },
     {
       name: "Female",
-      value: "female",
+      value: 1,
     },
   ];
+  useEffect(() => {
+    dispatch(getProfileService());
+  }, [router, picture]);
+
+  useEffect(() => {
+    setProfileData({
+      name: profile?.name ? profile?.name : "",
+      gender:
+        profile?.gender === "male"
+          ? "0"
+          : profile?.gender === "female"
+          ? "1"
+          : "",
+      birthday: profile?.birthday ? profile?.birthday : "",
+      hometown: profile?.hometown ? profile?.hometown : "",
+      bio: profile?.bio ? profile?.bio : "",
+    });
+  }, [data]);
+
+  const updateProfile = () => {
+    let updateProfileData = new FormData();
+    updateProfileData.append("name", profileData.name);
+    updateProfileData.append("gender", Number(profileData.gender));
+    updateProfileData.append("birthday", profileData.birthday);
+    updateProfileData.append("hometown", profileData.hometown);
+    updateProfileData.append("bio", profileData.bio);
+    dispatch(updateProfileService(updateProfileData));
+  };
+
   return (
     <div>
       <Head>
@@ -34,8 +83,10 @@ const ProfilPage = () => {
           style={{ alignItems: "flex-start", minWidth: "733px", gap: "1rem" }}
         >
           <div className="flex flex-col">
-            <div className="text-3xl font-bold">Irsyad Budi</div>
-            <div className="text-sm">Level 1 - #SG769891</div>
+            <div className="text-3xl font-bold">{profile?.name}</div>
+            <div className="text-sm">
+              Level {profile?.level} - #{profile?.id}
+            </div>
           </div>
           <div className="flex flex-col w-full">
             <div className="flex flex-row justify-between w-full">
@@ -53,51 +104,69 @@ const ProfilPage = () => {
           <Input
             label="Name"
             type="text"
-            value="Irsyad Budi"
+            value={profileData.name}
+            onChange={(value) =>
+              setProfileData({ ...profileData, name: value })
+            }
             isForm
             disabled={!isEdit}
           />
           <TextArea
             label="Bio"
-            value=""
+            value={profileData.bio}
             placeholder="Tulis Bio Anda disini"
             isForm
             disabled={!isEdit}
+            onChange={(value) => setProfileData({ ...profileData, bio: value })}
           />
           <div className="flex flex-row justify-between w-full gap-6">
             <Input
               label="Home Town"
               type="text"
-              value="Yogyakarta"
+              value={profileData.hometown}
               isForm
               disabled={!isEdit}
+              onChange={(value) =>
+                setProfileData({ ...profileData, hometown: value })
+              }
             />
             <Select
               label="Gender"
               option={genderList}
-              onSelect={(value) => console.log("select gender", value)}
-              defaultValue="male"
+              onSelect={(value) =>
+                setProfileData({ ...profileData, gender: value })
+              }
+              value={profileData.gender}
               disabled={!isEdit}
             />
           </div>
           <Input
             label="Date of Birth"
             type="date"
-            value="2021-03-01"
+            value={profileData.birthday}
             isForm
             disabled={!isEdit}
+            onChange={(value) =>
+              setProfileData({ ...profileData, birthday: value })
+            }
           />
           <div className={isEdit ? "flex flex-row gap-4" : "hidden"}>
             <Button
               type="secondary"
               text="Discard"
-              onClick={() => setEdit(false)}
+              onClick={() => {
+                setEdit(false);
+                setProfileData(initialData);
+                dispatch(getProfileService());
+              }}
               style={{ padding: "5px 15px" }}
             />
             <Button
               type="primary"
               text="Update"
               style={{ padding: "5px 15px" }}
+              onClick={() => updateProfile()}
+              loading={loading}
             />
           </div>
         </Box>

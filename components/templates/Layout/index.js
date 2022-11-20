@@ -1,10 +1,10 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../atoms/Button";
 import Navigation from "../../molecules/Navigation";
 import Box from "../Box";
 import ModalUpload from "../../molecules/ModalUpload";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postLogOutService } from "../../../redux/services/oauthServices";
 import Cookies from "js-cookie";
 
@@ -13,6 +13,9 @@ const Layout = ({ children }) => {
   const dispatch = useDispatch();
   const [isChangeCover, setChangeCover] = useState(false);
   const [isChangeProfilePic, setChangeProfilePic] = useState(false);
+  const { data } = useSelector((state) => state.profile.profileData);
+  const { data: picture } = useSelector((state) => state.profile.profilePic);
+  const profile = data?.data?.user;
 
   const logOutAction = () => {
     const accessToken = Cookies.get("token");
@@ -21,13 +24,22 @@ const Layout = ({ children }) => {
     data.append("confirm", 1);
     dispatch(postLogOutService(data));
   };
+
+  useEffect(() => {
+    setChangeProfilePic(false);
+    setChangeCover(false);
+  }, [picture]);
   return (
     <div className="w-screen h-screen flex flex-col">
       <Navigation />
       <div
         className="h-full w-full relative flex flex-col items-center"
         style={{
-          backgroundImage: `url(${fetchedImgSrc})`,
+          backgroundImage: `url(${
+            profile?.cover_picture.url
+              ? profile?.cover_picture.url
+              : fetchedImgSrc
+          })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain",
         }}
@@ -55,7 +67,11 @@ const Layout = ({ children }) => {
             <Box style={{ alignItems: "flex-start", gap: "1rem" }}>
               <div className="text-lg font-bold">Profile Picture</div>
               <Image
-                src="/profile-default.png"
+                src={
+                  profile?.user_picture?.picture?.url
+                    ? profile?.user_picture?.picture?.url
+                    : "/profile-default.jpg"
+                }
                 alt="profile-pic"
                 width={224}
                 height={224}
@@ -83,15 +99,15 @@ const Layout = ({ children }) => {
         isOpen={isChangeCover}
         onClose={() => setChangeCover(false)}
         title="Upload Cover Photo"
-        onClickUpload={() => console.log(" on click upload cover")}
         multiple={false}
+        type="coverPic"
       />
       <ModalUpload
         isOpen={isChangeProfilePic}
         onClose={() => setChangeProfilePic(false)}
         title="Upload Profil Photo"
-        onClickUpload={() => console.log(" on click upload profil pic")}
         multiple={false}
+        type="profilePic"
       />
     </div>
   );

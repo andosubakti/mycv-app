@@ -1,14 +1,20 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "../../atoms/Button";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import {
+  updateCoverPicService,
+  updateProfilePicService,
+} from "../../../redux/services/profileServices";
 
 const ModalUpload = ({
   isOpen,
   onClose,
   title = "Upload Picture",
-  onClickUpload,
   multiple,
+  type,
 }) => {
+  const dispatch = useDispatch();
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState(null);
   const [fileDataURL, setFileDataURL] = useState(null);
@@ -141,6 +147,18 @@ const ModalUpload = ({
       });
     };
   }, [imageFiles]);
+
+  const onClickUpload = () => {
+    if (type === "profilePic") {
+      let profilePicData = new FormData();
+      profilePicData.append("image", file);
+      dispatch(updateProfilePicService(profilePicData));
+    } else if (type === "coverPic") {
+      let coverPicData = new FormData();
+      coverPicData.append("image", file);
+      dispatch(updateCoverPicService(coverPicData));
+    }
+  };
 
   return (
     <>
