@@ -1,11 +1,12 @@
 Privy Test Frontend (Next.js)
 
 List Page :
-'/' : Halaman Login dan Register
-'/profil' : Halaman lihat dan edit Profile (untuk edit profile klik icon edit)
-'/career' : Halaman lihat dan edit Karir ( untuk menambahkan karir klik +)
-'/education' : Halaman lihat dan edit Education ( untuk menambahkan karir klik +)
-'/gallery' : Halaman untuk lihat dan tambah gambar gallery ( untuk menambahkan karir klik +)
+
+- '/' : Halaman Login dan Register
+- '/profil' : Halaman lihat dan edit Profile (untuk edit profile klik icon edit)
+- '/career' : Halaman lihat dan edit Karir ( untuk menambahkan karir klik +)
+- '/education' : Halaman lihat dan edit Education ( untuk menambahkan karir klik +)
+- '/gallery' : Halaman untuk lihat dan tambah gambar gallery ( untuk menambahkan karir klik +)
 
 catatan : ketika menambahkan data education atau data career, server justru mereplace, bukan menambah
 
