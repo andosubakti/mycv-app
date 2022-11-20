@@ -29,8 +29,8 @@ Fitur Login, Logout, Register
 
 catatan :
 
--ketika logout menghasilkan error : Error connecting to Redis on 127.0.0.1:6379 (Errno::ECONNREFUSED)
--logout secara manual dengan cara hapus Cookies 'token dan 'isLoggedIn
+- ketika logout menghasilkan error : Error connecting to Redis on 127.0.0.1:6379 (Errno::ECONNREFUSED)
+- logout secara manual dengan cara hapus Cookies 'token dan 'isLoggedIn
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
