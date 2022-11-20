@@ -35,3 +35,13 @@ export const updateCoverPic = async (data) =>
       "Content-Type": "multipart/form-data",
     },
   });
+
+export const updateCareer = async (data) =>
+  apiRequest({
+    path: `/profile/career`,
+    method: "POST",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

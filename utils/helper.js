@@ -20,6 +20,28 @@ export const getDateToday = () => {
   return `Today ${m} ${d}, ${y}`;
 };
 
+export const dateConverter = (value) => {
+  const month = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const date = new Date(value);
+  const m = month[date.getMonth()];
+  const d = date.getDate();
+  const y = date.getFullYear();
+  return `${m} ${d}, ${y}`;
+};
+
 export const phoneCodeChecker = (value, phone_code) => {
   if (value.substring(0, 2) !== phone_code && value.substring(0, 1) !== "0") {
     return phone_code + value;
