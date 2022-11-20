@@ -1,11 +1,14 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../atoms/Button";
 import Navigation from "../../molecules/Navigation";
 import Box from "../Box";
+import ModalUpload from "../../molecules/ModalUpload";
 
 const Layout = ({ children }) => {
   const fetchedImgSrc = "cover-default.png";
+  const [isChangeCover, setChangeCover] = useState(false);
+  const [isChangeProfilePic, setChangeProfilePic] = useState(false);
   return (
     <div className="w-screen h-screen flex flex-col">
       <Navigation />
@@ -23,7 +26,7 @@ const Layout = ({ children }) => {
             text="Change cover"
             icon="/camera-icon.svg"
             altIcon="camera-icon"
-            onClick={() => console.log("on click change cover")}
+            onClick={() => setChangeCover(true)}
           />
         </div>
         <div className="flex flex-col my-20" style={{ minWidth: "1061px" }}>
@@ -47,7 +50,7 @@ const Layout = ({ children }) => {
             <Button
               type="outlined"
               text="Upload Media"
-              onClick={() => console.log("on click upload media")}
+              onClick={() => setChangeProfilePic(true)}
             />
             <div className="text-sm text-customGray text-center w-full">
               PNG, JPG or MP4 up to 50MB
@@ -56,6 +59,20 @@ const Layout = ({ children }) => {
           {children}
         </div>
       </div>
+      <ModalUpload
+        isOpen={isChangeCover}
+        onClose={() => setChangeCover(false)}
+        title="Upload Cover Photo"
+        onClickUpload={() => console.log(" on click upload cover")}
+        multiple={false}
+      />
+      <ModalUpload
+        isOpen={isChangeProfilePic}
+        onClose={() => setChangeProfilePic(false)}
+        title="Upload Profil Photo"
+        onClickUpload={() => console.log(" on click upload profil pic")}
+        multiple={false}
+      />
     </div>
   );
 };

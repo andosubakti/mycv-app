@@ -21,6 +21,7 @@ module.exports = {
       customGray: "#818191",
       customRed: "#D02B29",
       customToscaLight: "#87F4E7",
+      black: "#000000",
     },
   },
   plugins: [],

@@ -37,6 +37,7 @@ const Navigation = () => {
                     ? "text-align border-b-2 border-b-customTosca px-2 py-1 text-transparent bg-clip-text bg-gradient-to-r from-customTosca to-customToscaLight cursor-pointer text-lg font-bold"
                     : "text-align px-2 py-1 text-customGray cursor-pointer text-lg font-semibold"
                 }
+                onClick={() => router.push(`${item.name.toLowerCase()}`)}
               >
                 {item.name}
               </div>
