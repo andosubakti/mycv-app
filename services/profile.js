@@ -45,3 +45,13 @@ export const updateCareer = async (data) =>
       "Content-Type": "multipart/form-data",
     },
   });
+
+export const updateEducation = async (data) =>
+  apiRequest({
+    path: `/profile/education`,
+    method: "POST",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

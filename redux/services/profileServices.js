@@ -4,6 +4,7 @@ import {
   updateProfilePic,
   updateCoverPic,
   updateCareer,
+  updateEducation,
 } from "../../services/profile";
 import {
   getProfileAction,
@@ -73,6 +74,19 @@ export const updateCareerService = (data) => {
   return async (dispatch) => {
     dispatch(updateProfileAction());
     return updateCareer(data)
+      .then((res) => {
+        dispatch(updateProfileActionSuccess(res.data));
+      })
+      .catch(() => {
+        dispatch(updateProfileActionError());
+      });
+  };
+};
+
+export const updateEducationService = (data) => {
+  return async (dispatch) => {
+    dispatch(updateProfileAction());
+    return updateEducation(data)
       .then((res) => {
         dispatch(updateProfileActionSuccess(res.data));
       })

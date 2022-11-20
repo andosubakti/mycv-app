@@ -146,9 +146,11 @@ const CareerPage = () => {
                 mockCareerData.map((item, index) => {
                   return (
                     <div className="flex flex-col w-full" key={index}>
-                      <div className="text-base font-bold">{item.name}</div>
+                      <div className="text-base font-bold">
+                        {item.company_name}
+                      </div>
                       <div className="text-base text-customGray">
-                        {item.start} - {item.end}
+                        {item.starting_from} - {item.ending_in}
                       </div>
                     </div>
                   );
