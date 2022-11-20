@@ -23,7 +23,7 @@ const ProfilPage = () => {
   const profile = data?.data?.user;
   const initialData = {
     name: "",
-    gender: null,
+    gender: "",
     birthday: "",
     hometown: "",
     bio: "",
