@@ -10,10 +10,17 @@ const Input = ({
   isForm,
   disabled,
   placeholder,
+  className,
 }) => {
   const [typeState, setTypeState] = useState(type);
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div
+      className={
+        className
+          ? className + " flex flex-col gap-2 w-full"
+          : "flex flex-col gap-2 w-full"
+      }
+    >
       <div className="text-sm">{label}</div>
       <div className="flex flex-row relative">
         <input
